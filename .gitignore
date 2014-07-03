@@ -19,6 +19,7 @@
 doc/
 *.swp
 *.swo
+*.swn
 *~
 .project
 .DS_Store

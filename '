@@ -51,23 +51,13 @@ describe "Authentication" do
   describe "authorization" do
 
 
-    describe "for signed-in users" do 
-      let(:user) { FactoryGirl.create(:user) }
+    discribe "for signed-in users" do 
+      let(:user) { FactroyGirl.create(:user) }
       before { sign_in user, no_capybara: true}
       
       describe "submitting a Users#new action" do
-        before { get signup_path } 
+        before { get new_user_path }
         specify { expect(response).to redirect_to(root_path) }
-      end 
-
-      describe "submitting a Users#create action" do
-
-        let(:params) do
-          { user: { name: "test", email: "test@test.test", password: user.password,
-                    password_confirmation: user.password } }
-        end
-          # before { post user_path, params }
-          # specify { expect(response).to redirect_to(root_path) }
       end 
     end 
 
@@ -142,36 +132,6 @@ describe "Authentication" do
       end
     end
 
-    describe "when attempting to visit a protected page" do
 
-      let(:user) { FactoryGirl.create(:user) }
-        before do
-          visit edit_user_path(user)
-          fill_in "Email",    with: user.email
-          fill_in "Password", with: user.password
-          click_button "Sign in"
-        end
-
-        describe "after signing in" do
-
-          it "should render the desired protected page" do
-            expect(page).to have_title('Edit user')
-          end
-
-          describe "when signing in again" do
-            before do
-              delete signout_path
-              visit signin_path
-              fill_in "Email",    with: user.email
-              fill_in "Password", with: user.password
-              click_button "Sign in"
-            end
-
-            it "should render the default (profile) page" do
-              expect(page).to have_title(user.name)
-            end
-          end
-        end
-      end
   end
 end

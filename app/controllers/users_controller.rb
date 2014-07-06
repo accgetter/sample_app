@@ -1,7 +1,9 @@
 class UsersController < ApplicationController
-  before_action :signed_in_user, only: [:index, :edit, :update, :destroy]
-  before_action :correct_user,   only: [:edit, :update]
-  before_action :admin_user,     only: :destroy
+  before_action :signed_in_user,         only: [:index, :edit, :update, :destroy]
+  before_action :correct_user,           only: [:edit, :update]
+  before_action :delete_myself,          only: :destroy 
+  before_action :admin_user,             only: :destroy
+  before_action :already_signed_in_user, only: [:new, :create]
 
   def index
     @users = User.paginate(page: params[:page])
@@ -63,5 +65,15 @@ class UsersController < ApplicationController
 
   def admin_user
     redirect_to(root_path) unless current_user.admin?
+  end
+
+  def already_signed_in_user
+     redirect_to(root_path) if signed_in?
+  end
+
+  def delete_myself
+    if params[:id] == current_user.id.to_s then
+      redirect_to edit_user_path, notice: "You can't delete yourself" 
+    end
   end
 end
